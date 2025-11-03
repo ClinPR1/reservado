@@ -1,0 +1,138 @@
+body {
+	margin: 0
+}
+@font-face {
+    font-family: 'chromoxome_probold_oblique';
+    src: url('chromoxomepro-boldoblique.woff2') format('woff2'),
+         url('chromoxomepro-boldoblique.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+#screen {
+    position: absolute;
+	background-color : #080808;
+    font-family: "chromoxome_probold_oblique",sans-serif;
+    /*width: 436px;
+    height: 400px;*/
+    width: 100%;
+    height: 100%;
+    bottom: 0;
+    color: white;
+    overflow: hidden;}
+#SteamName {
+    position: absolute;
+    font-size: 16vh;
+    left: 6%;
+    top: 68%;
+    width: 30%;
+    height: 30%;
+    overflow: hidden;
+}
+#Fuel {
+    position: absolute;
+    font-size: 16vh;
+    left: 2%;
+    top: 48%;
+    width: 30%;
+    height: 30%;
+    overflow: hidden;
+}
+#Temp {
+    position: absolute;
+    font-size: 10vh;
+    left: 62%;
+    top: 30%;
+    width: 20%;
+    height: 22%;
+    overflow: hidden;
+}
+#Speed {
+    position: absolute;
+    font-size: 16vh;
+    left: 66%;
+    top: 48%;
+    width: 30%;
+    height: 30%;
+}
+#RPMBlock {
+    position: absolute;
+    text-align: center;
+    font-size: 18vh;
+    left: 34%;
+    top: 50%;
+    width: 26%;
+    height: 40%;
+}
+#SpeedSelector {
+    position: absolute;
+    text-align: left;
+    font-size: 36vh;
+    margin: 0;
+    left: 30%;
+    top: -17%;
+    width: 80%;
+    height: 80%;
+    overflow: show;
+}
+.small-unitfuel {
+    position: absolute;
+    text-align: right;
+    font-size: 10vh;
+    margin: 0;
+    top: 30%;
+    left: 48%;
+}
+.small-valuefuel {
+    position: relative;
+    text-align: right;
+    font-size: 10vh;
+    margin: 0;
+    right: 58%;
+    top: 30%;
+}
+.small-text {
+    position: absolute;
+    text-align: right;
+    font-size: 8vh;
+    right: 25%;
+    margin: 0;
+}
+.small-value {
+    position: relative;
+    text-align: right;
+    font-size: 10vh;
+    margin: 0;
+    right: 48%;
+    top: 30%;
+}
+.supersmall-value {
+    position: relative;
+    text-align: right;
+    font-size: 8vh;
+    margin: 0;
+    right: 48%;
+    top: 30%;
+}
+.small-unit {
+    position: absolute;
+    text-align: right;
+    font-size: 10vh;
+    margin: 0;
+    top: 30%;
+    left: 58%;
+}
+.large-value {
+    position: absolute;
+    text-align: left;
+    font-size: 13vh;
+    margin: 0;
+    top: 15%;
+}
+.large-unit {
+    position: absolute;
+    text-align: left;
+    font-size: 8vh;
+    margin: 0;
+    top: 28%;
+    left: 72%;
+}
