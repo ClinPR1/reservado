@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>EL SUEÑO AMERICANO ESTÁ HECHO EN CHINA</title>
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background-color: black;
+      color: white;
+      font-family: 'Merriweather', serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center; /* Todo centrado horizontalmente */
+      padding: 20px;
+      min-height: 100vh;
+    }
+
+    /* GIF grande arriba */
+    #gif-container {
+      width: 90%;
+      max-width: 1200px;
+      margin-bottom: 30px;
+    }
+
+    #gif-container img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* Título centrado como el GIF */
+    #title {
+      font-size: 60px;
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    /* Contenedor de carpetas a la izquierda */
+    #folders {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start; /* carpetas alineadas a la izquierda */
+      width: 100%;
+      max-width: 400px; /* ancho del área de carpetas */
+      gap: 10px;
+    }
+
+    /* Carpeta */
+    .folder {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      gap: 10px;
+    }
+
+    /* Logo de carpeta solo borde blanco */
+    .folder-logo {
+      width: 30px;
+      height: 25px;
+      border: 2px solid white;
+      border-radius: 3px 3px 0 0;
+      position: relative;
+    }
+
+    .folder-logo::before {
+      content: '';
+      position: absolute;
+      top: -5px;
+      left: 3px;
+      width: 12px;
+      height: 5px;
+      border: 2px solid white;
+      border-bottom: none;
+      border-radius: 2px 2px 0 0;
+      background: transparent;
+    }
+
+    .folder-name {
+      font-size: 18px;
+    }
+
+    /* Contenido desplegable debajo de cada carpeta */
+    .folder-content {
+      max-width: 900px;
+      font-size: 18px;
+      white-space: pre-line;
+      display: none;
+      margin-left: 40px; /* indentado debajo del logo */
+      margin-top: 5px;
+    }
+
+  </style>
+</head>
+<body>
+
+  <div id="gif-container">
+    <img src="pump.gif" alt="Pump GIF">
+  </div>
+
+  <div id="title">EL SUEÑO AMERICANO ESTÁ HECHO EN CHINA</div>
+
+  <!-- Carpetas alineadas a la izquierda -->
+  <div id="folders">
+    <div class="folder" onclick="toggleContent(this)">
+      <div class="folder-logo"></div>
+      <div class="folder-name">Campaña</div>
+    </div>
+    <div class="folder-content">
+Campaña de Donación
+Te explico cómo funciona y qué podés hacer:
+
+1️⃣ Plataformas de recaudación
+Hay sitios confiables donde podés crear campañas de donación personalizadas:
+
+GoFundMe → la más conocida, ideal para gastos médicos y familiares.
+Givebutter → permite donaciones online y tiene buena transparencia.
+Facebook/Meta Fundraisers → fácil de compartir con amigos y familiares.
+YouCaring / JustGiving → también se usa para emergencias médicas.
+
+2️⃣ Qué necesitás
+Una historia clara: explica quién es tu hermano, su situación y por qué necesitás ayuda.
+Fotos o videos (opcionales pero ayudan mucho).
+Objetivo económico: cuánto necesitás recaudar y para qué se usará.
+Forma de transferir el dinero a tu hermano o a su tratamiento (cuenta bancaria, Paypal, etc.).
+
+3️⃣ Consejos prácticos
+Sé honesto y transparente: la gente confía más cuando sabe exactamente cómo se va a usar el dinero.
+Comparte la campaña con familiares, amigos, redes sociales.
+Actualiza a los donantes con progreso y resultados: eso genera más confianza y más donaciones.
+Si querés, puedo ayudarte a armar la campaña completa paso a paso para tu hermano, con texto, sugerencias de fotos y todo listo para publicarlo. Así te ahorrás confusiones y queda muy profesional.
+
+2️⃣ Rangos de recaudación aproximados
+Pequeña difusión (solo familiares y amigos cercanos): USD 500 – 5,000
+Difusión moderada (amigos de amigos, comunidad local, grupos en redes sociales): USD 5,000 – 20,000
+Difusión amplia / viral (medios locales, grupos grandes, campañas compartidas muchas veces): USD 20,000 – 50,000+
+
+💡 Ejemplo real: Una operación cardíaca de un menor en Argentina o EE. UU. suele costar entre USD 5,000 y 40,000, dependiendo de la clínica y si hay internación, cirujanos especializados, etc. Una campaña bien hecha puede alcanzar o superar esa cifra.
+    </div>
+
+    <div class="folder" onclick="toggleContent(this)">
+      <div class="folder-logo"></div>
+      <div class="folder-name">Alfajor</div>
+    </div>
+    <div class="folder-content">Paracetamol + analgésicos + Analgésicos naturales suaves, como infusiones de manzanilla, valeriana o pasiflora, que ayudan más al sistema nervioso que al dolor directamente</div>
+
+    <div class="folder" onclick="toggleContent(this)">
+      <div class="folder-logo"></div>
+      <div class="folder-name">Otro 2</div>
+    </div>
+    <div class="folder-content">Contenido de otra carpeta 2</div>
+  </div>
+
+  <script>
+    function toggleContent(folder) {
+      const content = folder.nextElementSibling;
+      if (content.style.display === "block") {
+        content.style.display = "none";
+      } else {
+        content.style.display = "block";
+        content.scrollIntoView({behavior: "smooth"});
+      }
+    }
+  </script>
+</body>
+</html>
