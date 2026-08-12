@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El Número Ganador | Probabilidad</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: #07080d;
+    color: #f5f7ff;
+    font-family: Inter, Arial, sans-serif;
+    overflow: hidden;
+}
+
+.deck {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+}
+
+.slide {
+    position: absolute;
+    inset: 0;
+    padding: 8vh 10vw;
+    display: flex;
+    align-items: center;
+    opacity: 0;
+    transform: translateX(40px);
+    pointer-events: none;
+    transition: .45s ease;
+    overflow: hidden;
+}
+
+.slide.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+}
+
+/* Luces de fondo */
+
+.slide::before {
+    content: "";
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    right: -150px;
+    top: -180px;
+    background: #6d5dfc;
+    filter: blur(130px);
+    opacity: .18;
+}
+
+.slide::after {
+    content: "";
+    position: absolute;
+    width: 350px;
+    height: 350px;
+    border-radius: 50%;
+    left: -160px;
+    bottom: -160px;
+    background: #00d9ff;
+    filter: blur(120px);
+    opacity: .12;
+}
+
+.content {
+    width: 100%;
+    max-width: 1100px;
+    position: relative;
+    z-index: 2;
+}
+
+.kicker {
+    color: #8d82ff;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+}
+
+h1 {
+    font-size: clamp(55px, 8vw, 100px);
+    line-height: .9;
+    letter-spacing: -5px;
+    margin: 0 0 25px;
+}
+
+h2 {
+    font-size: clamp(42px, 5vw, 68px);
+    letter-spacing: -3px;
+    margin: 0 0 30px;
+}
+
+h3 {
+    margin: 0 0 10px;
+    font-size: 22px;
+}
+
+p {
+    color: #adb5c7;
+    font-size: 19px;
+    line-height: 1.6;
+}
+
+.accent {
+    color: #8d82ff;
+}
+
+.subtitle {
+    font-size: 24px;
+    max-width: 700px;
+}
+
+.badge {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 12px 18px;
+    border: 1px solid #2b3040;
+    background: #11141d;
+    border-radius: 999px;
+    color: #cbd1df;
+}
+
+.die {
+    font-size: 80px;
+    margin-bottom: 15px;
+    filter: drop-shadow(0 15px 25px #6d5dfc44);
+}
+
+/* Cards */
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    margin-top: 25px;
+}
+
+.card {
+    background: rgba(16, 19, 28, .9);
+    border: 1px solid #292f3d;
+    border-radius: 22px;
+    padding: 25px;
+}
+
+.card:hover {
+    border-color: #7167ff;
+}
+
+.big {
+    font-size: 43px;
+    font-weight: 800;
+    margin: 10px 0;
+}
+
+small {
+    color: #858ea0;
+}
+
+/* Reglas */
+
+.steps {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.step {
+    display: flex;
+    gap: 16px;
+    background: #10131b;
+    border: 1px solid #292f3d;
+    border-radius: 18px;
+    padding: 20px;
+}
+
+.number {
+    min-width: 38px;
+    height: 38px;
+    background: #6d5dfc;
+    border-radius: 12px;
+    display: grid;
+    place-items: center;
+    font-weight: 800;
+}
+
+/* Fórmula */
+
+.formula {
+    display: inline-block;
+    padding: 22px 28px;
+    margin: 15px 0;
+    border: 1px solid #303646;
+    background: #11141c;
+    border-radius: 18px;
+    font-size: 28px;
+    font-weight: 700;
+}
+
+/* Barras */
+
+.bar {
+    max-width: 750px;
+    margin: 20px 0;
+}
+
+.bar-title {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.track {
+    height: 13px;
+    background: #1b202b;
+    border-radius: 50px;
+    overflow: hidden;
+}
+
+.fill {
+    height: 100%;
+    background: linear-gradient(90deg, #7167ff, #00d9ff);
+    border-radius: 50px;
+}
+
+/* Tabla */
+
+table {
+    border-collapse: collapse;
+    width: 800px;
+    max-width: 100%;
+    background: #11141c;
+    border: 1px solid #292f3d;
+    border-radius: 18px;
+    overflow: hidden;
+}
+
+th,
+td {
+    padding: 14px 18px;
+    text-align: left;
+    border-bottom: 1px solid #292f3d;
+}
+
+th {
+    color: #938aff;
+    font-size: 13px;
+    text-transform: uppercase;
+}
+
+.quote {
+    border-left: 4px solid #7167ff;
+    padding-left: 20px;
+    font-size: 25px;
+    color: #f1f3fa;
+}
+
+/* Controles */
+
+.controls {
+    position: fixed;
+    right: 28px;
+    bottom: 25px;
+    z-index: 20;
+    display: flex;
+    gap: 8px;
+}
+
+button {
+    width: 45px;
+    height: 45px;
+    border-radius: 12px;
+    border: 1px solid #303646;
+    background: #11141c;
+    color: white;
+    font-size: 19px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #242938;
+}
+
+.progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #7167ff, #00d9ff);
+    width: 14%;
+    z-index: 30;
+    transition: .4s;
+}
+
+.footer {
+    position: fixed;
+    bottom: 30px;
+    left: 10vw;
+    color: #596174;
+    font-size: 12px;
+    z-index: 10;
+}
+
+/* Responsive */
+
+@media(max-width: 800px) {
+
+    .slide {
+        padding: 7vh 7vw;
+    }
+
+    .grid,
+    .steps {
+        grid-template-columns: 1fr;
+    }
+
+    h1 {
+        letter-spacing: -3px;
+    }
+
+    .footer {
+        left: 7vw;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="deck">
+
+<div class="progress" id="progress"></div>
+
+<!-- 1 -->
+
+<section class="slide active">
+
+<div class="content">
+
+<div class="kicker">
+Matemática · Probabilidad
+</div>
+
+<div class="die">⚄</div>
+
+<h1>
+EL NÚMERO<br>
+<span class="accent">GANADOR</span>
+</h1>
+
+<p class="subtitle">
+Un juego de azar creado para comprender la probabilidad de una manera práctica y divertida.
+</p>
+
+<div class="badge">
+🎲 Basado en el lanzamiento de un dado
+</div>
+
+</div>
+
+</section>
+
+
+<!-- 2 -->
+
+<section class="slide">
+
+<div class="content">
+
+<div class="kicker">
+01 · La idea
+</div>
+
+<h2>
+¿De qué trata?
+</h2>
+
+<p>
+<strong>El Número Ganador</strong> es un juego basado en la probabilidad.
+Los jugadores eligen números antes de lanzar un dado y deben intentar
+acertar el resultado.
+</p>
+
+<div class="grid">
+
+<div class="card">
+<h3>🎯 Elegir</h3>
+<small>
+Seleccioná tus números antes de tirar.
+</small>
+</div>
+
+<div class="card">
+<h3>🎲 Lanzar</h3>
+<small>
+El dado determina el resultado.
+</small>
+</div>
+
+<div class="card">
+<h3>🏆 Ganar</h3>
+<small>
+Acertá y conseguí puntos.
+</small>
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- 3 -->
+
+<section class="slide">
+
+<div class="content">
+
+<div class="kicker">
+02 · Reglas
+</div>
+
+<h2>
+¿Cómo se juega?
+</h2>
+
+<div class="steps">
+
+<div class="step">
+<div class="number">1</div>
+<div>
+<h3>Elegí</h3>
+<p>Elegí 1, 2 o 3 números del 1 al 6.</p>
+</div>
+</div>
+
+<div class="step">
+<div class="number">2</div>
+<div>
+<h3>Tirá</h3>
+<p>Lanzá el dado una vez.</p>
+</div>
+</div>
+
+<div class="step">
+<div class="number">3</div>
+<div>
+<h3>Comprobá</h3>
+<p>Si sale uno de tus números, acertaste.</p>
+</div>
+</div>
+
+<div class="step">
+<div class="number">4</div>
+<div>
+<h3>Sumá</h3>
+<p>Después de 5 rondas, gana quien tenga más puntos.</p>
+</div>
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- 4 -->
+
+<section class="slide">
+
+<div class="content">
+
+<div class="kicker">
+03 · Teoría
+</div>
+
+<h2>
+¿Qué es la <span class="accent">probabilidad</span>?
+</h2>
+
+<p>
+La probabilidad indica qué tan posible es que ocurra un determinado resultado.
+</p>
+
+<div class="formula">
+Probabilidad = casos favorables ÷ casos posibles
+</div>
+
+<p>
+Como nuestro dado tiene 6 caras, existen
+<strong>6 resultados posibles:</strong>
+</p>
+
+<div class="grid">
+
+<div class="card">
+<div class="big">1</div>
+<small>Una cara del dado</small>
+</div>
+
+<div class="card">
+<div class="big">6</div>
+<small>Resultados posibles</small>
+</div>
+
+<div class="card">
+<div class="big">⅙</div>
+<small>Probabilidad de un número</small>
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- 5 -->
+
+<section class="slide">
+
+<div class="content">
+
+<div class="kicker">
+04 · Aplicación
+</div>
+
+<h2>
+La probabilidad<br>
+<span class="accent">en el juego</span>
+</h2>
+
+<p>
+La cantidad de números que elegimos cambia nuestras posibilidades de acertar.
+</p>
+
+<div class="bar">
+
+<div class="bar-title">
+<span>1 número</span>
+<strong>16,7%</strong>
+</div>
+
+<div class="track">
+<div class="fill" style="width:33%"></div>
+</div>
+
+</div>
+
+<div class="bar">
+
+<div class="bar-title">
+<span>2 números</span>
+<strong>33,3%</strong>
+</div>
+
+<div class="track">
+<div class="fill" style="width:66%"></div>
+</div>
+
+</div>
+
+<div class="bar">
+
+<div class="bar-title">
+<span>3 números</span>
+<strong>50%</strong>
+</div>
+
+<div class="track">
+<div class="fill" style="width:100%"></div>
+</div>
+
+</div>
+
+<p>
+<strong>Cuantos más números elegimos, mayor es la probabilidad de acertar.</strong>
+</p>
+
+</div>
+
+</section>
+
+
+<!-- 6 -->
+
+<section class="slide">
+
+<div class="content">
+
+<div class="kicker">
+05 · Ejemplo
+</div>
+
+<h2>
+Una ronda
+</h2>
+
+<p>
+Lucas elige los números <strong>2 y 5</strong>.
+</p>
+
+<table>
+
+<tr>
+<th>Resultado</th>
+<th>¿Acertó?</th>
+<th>Posibilidad</th>
+</tr>
+
+<tr>
+<td>1</td>
+<td>❌</td>
+<td rowspan="6">
+2 de 6<br>
+<strong>33,3%</strong>
+</td>
+</tr>
+
+<tr>
+<td>2</td>
+<td>✅</td>
+</tr>
+
+<tr>
+<td>3</td>
+<td>❌</td>
+</tr>
+
+<tr>
+<td>4</td>
+<td>❌</td>
+</tr>
+
+<tr>
+<td>5</td>
+<td>✅</td>
+</tr>
+
+<tr>
+<td>6</td>
+<td>❌</td>
+</tr>
+
+</table>
+
+<p class="quote">
+Hay 2 resultados favorables de 6 posibles:
+<strong>2/6 = 33,3%</strong>
+</p>
+
+</div>
+
+</section>
+
+
+<!-- 7 -->
+
+<section class="slide">
+
+<div class="content">
+
+<div class="kicker">
+06 · Conclusión
+</div>
+
+<h2>
+¿Qué aprendemos?
+</h2>
+
+<p class="quote">
+Nuestro juego demuestra que la probabilidad puede aplicarse
+a situaciones cotidianas y juegos de azar.
+</p>
+
+<div class="grid">
+
+<div class="card">
+<h3>🎲 Azar</h3>
+<small>
+El resultado depende del lanzamiento.
+</small>
+</div>
+
+<div class="card">
+<h3>📊 Probabilidad</h3>
+<small>
+Podemos calcular las posibilidades de acertar.
+</small>
+</div>
+
+<div class="card">
+<h3>🧠 Decisión</h3>
+<small>
+Elegir más números aumenta la posibilidad de ganar.
+</small>
+</div>
+
+</div>
+
+<p style="margin-top:35px;color:#938aff;font-weight:700;">
+¡Gracias por participar!
+</p>
+
+</div>
+
+</section>
+
+
+<div class="footer">
+EL NÚMERO GANADOR · PROBABILIDAD
+</div>
+
+<div class="controls">
+
+<button onclick="prev()">←</button>
+<button onclick="next()">→</button>
+
+</div>
+
+</div>
+
+
+<script>
+
+const slides = document.querySelectorAll(".slide");
+
+let current = 0;
+
+function showSlide(index) {
+
+    current = (index + slides.length) % slides.length;
+
+    slides.forEach((slide, i) => {
+        slide.classList.toggle("active", i === current);
+    });
+
+    document.getElementById("progress").style.width =
+        ((current + 1) / slides.length * 100) + "%";
+}
+
+function next() {
+    showSlide(current + 1);
+}
+
+function prev() {
+    showSlide(current - 1);
+}
+
+document.addEventListener("keydown", function(event) {
+
+    if (event.key === "ArrowRight" || event.key === " ") {
+        event.preventDefault();
+        next();
+    }
+
+    if (event.key === "ArrowLeft") {
+        prev();
+    }
+
+});
+
+</script>
+
+</body>
+</html>
